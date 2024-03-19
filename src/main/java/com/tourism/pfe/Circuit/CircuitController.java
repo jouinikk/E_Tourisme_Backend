@@ -29,8 +29,6 @@ import java.util.List;
 public class CircuitController {
     private final CircuitService circuitService;
 
-
-
     @Autowired
     public CircuitController(CircuitService circuitService) {
         this.circuitService = circuitService;
@@ -41,6 +39,15 @@ public class CircuitController {
         return new ResponseEntity<>(circuits, HttpStatus.OK);
     }
 
+    @GetMapping("/all")
+    public List<CircuitDTOResponse>getAll(){
+        return circuitService.getAllCircuitsWithSortiesAndImages();
+    }
+
+    @GetMapping("/{id}")
+    public CircuitDTOResponse getOne(@PathVariable int id){
+        return circuitService.getOneWithSortiesAndImages(id);
+    }
 
 
     @PostMapping(value = "/addCircuit",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
