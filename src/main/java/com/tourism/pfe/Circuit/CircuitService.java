@@ -36,45 +36,6 @@ public class CircuitService {
         return imageCircuitRepository.findImageCircuitByCircuitId(id);
     }
 
-    public Circuit addCircuitWithSortieCircuits(Circuit circuit, List<SortieCircuit> sortieCircuits) {
-        // Save the Circuit to get its ID
-        Circuit savedCircuit = circuitRepository.save(circuit);
-
-        // Set the Circuit for each SortieCircuit and save them
-        for (SortieCircuit sortieCircuit : sortieCircuits) {
-            sortieCircuit.setCircuit(savedCircuit);
-            sortieCircuitRepository.save(sortieCircuit);
-        }
-
-        // Return the saved Circuit with its associated SortieCircuits
-        return savedCircuit;
-    }
-
-    public Circuit addCircuitWithSortieCircuitsandImages(Circuit circuit, List<SortieCircuit> sortieCircuits, List<MultipartFile> imagesCircuit) throws IOException {
-        // Save the Circuit to get its ID
-        Circuit savedCircuit = circuitRepository.save(circuit);
-
-        // Set the Circuit for each SortieCircuit and save them
-        for (SortieCircuit sortieCircuit : sortieCircuits) {
-            sortieCircuit.setCircuit(savedCircuit);
-            sortieCircuitRepository.save(sortieCircuit);
-        }
-
-        for (MultipartFile image:imagesCircuit){
-            BufferedImage bi = ImageIO.read(image.getInputStream());
-            if (bi == null) {
-                throw new IOException();
-            }
-            Map result = cloudinaryService.upload(image);
-            ImageCircuit imageCircuit = new ImageCircuit();
-            imageCircuit.setImageUrl((String) result.get("url"));
-            imageCircuit.setCircuit(savedCircuit);
-            imageCircuitRepository.save(imageCircuit);
-        }
-
-        // Return the saved Circuit with its associated SortieCircuits
-        return savedCircuit;
-    }
 
     @Transactional
         public void createCircuit(CircuitDTO circuitDTO) throws IOException {
@@ -87,7 +48,6 @@ public class CircuitService {
             circuit.setDescription(circuitDTO.getDescription());
 
             circuit = circuitRepository.save(circuit);
-
 
             if(circuitDTO.getImages()!=null){
                 for (MultipartFile file : circuitDTO.getImages()) {
@@ -113,4 +73,34 @@ public class CircuitService {
 
     }
 
+    public List<CircuitDTOResponse> getAllCircuitsWithSortiesAndImages(){
+        List<Circuit> circuits = circuitRepository.findAll();
+        List<CircuitDTOResponse> response = new ArrayList<>();
+        for (Circuit circuit: circuits){
+            CircuitDTOResponse dto = new CircuitDTOResponse();
+            dto.setImages(imageCircuitRepository.findImageCircuitByCircuitId(circuit.getId()));
+            dto.setSortieCircuits(sortieCircuitRepository.findByCircuitId(circuit.getId()));
+            dto.setLibelle(circuit.getLibelle());
+            dto.setDescription(circuit.getDescription());
+            dto.setType(circuit.getType());
+            dto.setActive(circuit.isActive());
+            dto.setVille(circuit.getVille());
+            dto.setCourtDescription(circuit.getCourtDescription());
+            response.add(dto);
+        }
+        return response;
+    }
+
+    public CircuitDTOResponse getOneWithSortiesAndImages(int id){
+        Circuit circuit = circuitRepository.findById(id).get();
+        CircuitDTOResponse response= new CircuitDTOResponse();
+        response.setImages(imageCircuitRepository.findImageCircuitByCircuitId(id));
+        response.setSortieCircuits(sortieCircuitRepository.findByCircuitId(id));
+        response.setType(circuit.getType());
+        response.setDescription(circuit.getDescription());
+        response.setCourtDescription(circuit.getCourtDescription());
+        response.setActive(circuit.isActive());
+        response.setVille(circuit.getVille());
+        return response;
+    }
 }
