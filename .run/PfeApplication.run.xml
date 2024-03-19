@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="PfeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
+    <envs>
+      <env name="DB_USERNAME" value="$DB_USERNAME$" />
+      <env name="DB_PASSWORD" value="$DB_PASSWORD$" />
+    </envs>
+    <module name="pfe" />
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.tourism.pfe.PfeApplication" />
+    <method v="2">
+      <option name="Make" enabled="true" />
+    </method>
+  </configuration>
+</component>
