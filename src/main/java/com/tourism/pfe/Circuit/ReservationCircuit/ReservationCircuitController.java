@@ -16,11 +16,16 @@ public class ReservationCircuitController {
         return reservationCircuitService.getAllReservation();
     }
     @PostMapping("/add")
-    public void addResrevation(ReservationCircuit reservationCircuit){
+    public void addResrevation(@RequestBody  ReservationCircuit reservationCircuit){
         reservationCircuitService.addReservation(reservationCircuit);
     }
+    @GetMapping("/{id}")
+    public ReservationCircuit getOne(@PathVariable int id){
+        return reservationCircuitService.getOne(id);
+    }
+
     @DeleteMapping("/delete/{id}")
-    public void Delete(int id){
+    public void Delete(@PathVariable int id){
         reservationCircuitService.deleteReservation(id);
     }
 }

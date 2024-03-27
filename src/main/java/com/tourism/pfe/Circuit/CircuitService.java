@@ -74,7 +74,7 @@ public class CircuitService {
     }
 
     public List<CircuitDTOResponse> getAllCircuitsWithSortiesAndImages(){
-        List<Circuit> circuits = circuitRepository.findAll();
+        List<Circuit> circuits = circuitRepository.findCircuitsByActiveIsTrue();
         List<CircuitDTOResponse> response = new ArrayList<>();
         for (Circuit circuit: circuits){
             CircuitDTOResponse dto = new CircuitDTOResponse();
@@ -93,6 +93,7 @@ public class CircuitService {
 
     public CircuitDTOResponse getOneWithSortiesAndImages(int id){
         Circuit circuit = circuitRepository.findById(id).get();
+        if (!circuit.isActive()) return null;
         CircuitDTOResponse response= new CircuitDTOResponse();
         response.setImages(imageCircuitRepository.findImageCircuitByCircuitId(id));
         response.setSortieCircuits(sortieCircuitRepository.findByCircuitId(id));

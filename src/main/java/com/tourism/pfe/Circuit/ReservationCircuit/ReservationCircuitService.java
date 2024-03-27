@@ -22,4 +22,7 @@ public List<ReservationCircuit> getAllReservation(){
     return reservationCircuitRepository.findAll();
 }
 
+    public ReservationCircuit getOne(int id) {
+        return reservationCircuitRepository.findById(id).get();
+    }
 }

@@ -23,14 +23,12 @@ public class ReservationCircuit {
     private Date date ;
 
     private Float Totale ;
+
     @ManyToOne
     @JoinColumn(name = "idClient")
-
     private Client idClient ;
+
     @ManyToOne
     @JoinColumn(name = "idSC")
-
     private SortieCircuit idSc;
-
-
 }
